@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Nav, Form, Button } from 'react-bootstrap';
 import '../styles/profile.css';
 import UserProfile from '../components/UserProfile';
+import { PaymentHistory } from '../components/PaymentHistory';
 
 function Profile() {
   const [activeTab, setActiveTab] = useState('personalInfo');
@@ -21,7 +22,7 @@ function Profile() {
                 Thông tin cá nhân
               </Nav.Link>
               <Nav.Link active={activeTab === 'timeAnalysis'} onClick={() => handleNavTabClick('timeAnalysis')}>
-                Phân tích thời gian học
+              Lịch sử giao dịch
               </Nav.Link>
               <Nav.Link active={activeTab === 'completedCourses'} onClick={() => handleNavTabClick('completedCourses')}>
                 Các khóa đã hoàn thành
@@ -41,8 +42,9 @@ function Profile() {
             )}
             {activeTab === 'timeAnalysis' && (
               <div>
-                <h2>Phân tích thời gian học</h2>
+                <h2>Lịch sử giao dịch</h2>
                 {/* Time analysis content */}
+                <PaymentHistory/>
               </div>
             )}
             {activeTab === 'completedCourses' && (

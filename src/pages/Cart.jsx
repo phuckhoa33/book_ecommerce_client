@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import '../styles/cart.scss';
 
 export const Cart = () => {
+    const navigate = useNavigate();
     return (
         <>
             <div className="wrap cf">
@@ -120,7 +122,7 @@ export const Cart = () => {
                     
                             <li className="totalRow"><span className="label">Tax</span><span className="value">$4.00</span></li>
                             <li className="totalRow final"><span className="label">Total</span><span className="value">$44.00</span></li>
-                    <li className="totalRow"><a href="#" className="btn continue">Checkout</a></li>
+                    <li className="totalRow"><a href="#" className="btn continue" onClick={() => navigate("/payment/8/8")}>Checkout</a></li>
                     </ul>
                 </div>
                 </div>

@@ -13,6 +13,7 @@ import { ResetPassword } from './pages/SendEmailResetPassword';
 import ResetPasswordForm from './pages/CreateNewPassword';
 import AboutUs from './pages/AboutUs';
 import { Contact } from './pages/Contact';
+import { Payment } from './pages/PaymentPage';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
               <Route path='/contact' element={<Contact/>}/>
 
             </Route>
+            <Route path='/payment/:sessionId/:userId' element={<Payment/>}/>
             <Route path='*' element={<Error404/>}/>
           </Routes>
       </Router>

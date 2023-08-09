@@ -1,0 +1,40 @@
+.account {
+    position: relative;
+  }
+  
+  .account-tag {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .toolbox {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    display: none;
+    flex-direction: column;
+    z-index: 1;
+  }
+
+  .toolbox a {
+    text-decoration: none;
+  }
+  
+  .account:hover .toolbox {
+    display: flex;
+  }
+  .notification-badge {
+    position: absolute;
+    top: -8px;
+    right: 13vh;
+    width: 3vh;
+    height: 3vh;
+    font-size: 1vh;
+    text-align: center ;
+  }  
