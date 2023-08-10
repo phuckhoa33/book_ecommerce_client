@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import '../styles/forgotpassword.scss';
 import { Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { getUserByEmail, sendEmailResetPassword } from '../store/store';
+import Cookies from 'universal-cookie';
+ 
+const cookies = new Cookies();
 
 
 export const ResetPassword = () => {
@@ -13,41 +18,45 @@ export const ResetPassword = () => {
     const handleSendEmail = async(e) => {
         e.preventDefault();
         if(email===""){
-            alert("Bạn phải điền email vào");
+            toast.warn("Please enter your email");
             return;
         }
-        // const code = generateRandomCode(20);
-        // cookies.set('code', code);
-        // setLoading(true);
-        // const result = await send_code({email, code});
-        // setLoading(false);
-        // setValue(result.result);
+
+        setLoading(true);
+        const sendEmailProcess = await sendEmailResetPassword({email});
+        const getUserByEmailProcess = await getUserByEmail(email);
+        Promise.all([getUserByEmailProcess, sendEmailProcess]);
+        setLoading(false);
+        if(sendEmailProcess.data.message==="Success to call API GetAllUsers"){
+            setValue("Oh Yeah");
+        }
+        cookies.set("userPassword", getUserByEmailProcess.data.data);
     }
 
     return (
         <div class='empty_layout'>
             <div class="card login-form">
                 <div class="card-body">
-                    <h3 class="card-title text-center fw-bolder fs-2">Gửi mail để đặt lại mật khẩu</h3>
+                    <h3 class="card-title text-center fw-bolder fs-2">Send mail so that reset password</h3>
                     
                     <div class="card-text">
-                        {value===null||value? (
+                        {value===null? (
                             <form>
                                 <div class="form-group" style={{display:'flex', justifyContent: 'center', alignItems:'center'}}>
 
-                                    <input type="email" class="form-control form-control-sm" name='email' value={email} onChange={(e => setEmail(e.target.value))} placeholder="Điền địa chỉ email của bạn"/>
+                                    <input type="email" class="form-control form-control-sm" name='email' value={email} onChange={(e => setEmail(e.target.value))} placeholder="Enter email address"/>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block" onClick={handleSendEmail}>{loading?<Spinner/>:"Đặt lại mật khẩu"}</button>
+                                <button type="submit" class="btn btn-primary btn-block" onClick={handleSendEmail}>{loading?<Spinner/>:"Reset Password"}</button>
                             </form>
 
                         ): (
                             <div className='form-group'>
                                 <div class="container">
-                                <h1>Kiểm tra email của bạn</h1>
-                                <p>Vui lòng click nút ở bên dưới để nhận mail và đặt lại mật khẩu</p>
+                                <h1>Check your email</h1>
+                                <p>Please click this button so that reset your password</p>
                                 <form action="#" method="post">
-                                <button type="button" class='btn btn-primary btn-block'><a href="https://mail.google.com/mail">Kiem tra Email</a></button>
+                                <button type="button" class='btn btn-primary btn-block'><a href="https://mail.google.com/mail">Check email</a></button>
                                 </form>
                             </div>
                             </div>

@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import '../styles/createNewPassword.css'; // Import file CSS tùy chỉnh
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+ 
+const cookies = new Cookies();
 
 function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!cookies.get('userPassword')){
+      navigate("errorSoMan");
+    }
+  }, [])
 
   const handlePasswordChange = (event) => {
     setNewPassword(event.target.value);
