@@ -1,6 +1,10 @@
+import { useCartContext } from '../context/cartContext';
+import { useUserContext } from '../context/userContext'
 import '../styles/payment.css'
 
 export const Payment = () => {
+	const {user} = useUserContext();
+	const {totalAfterTaxAndShipping} = useCartContext();
     return (
         <div class="wapper">
 		<section class="sidebar-section">
@@ -9,7 +13,7 @@ export const Payment = () => {
 				<ul>
 					<li>
 						<em>Amount</em>
-						<span>$8.99 USD</span>
+						<span>${totalAfterTaxAndShipping} USD</span>
 					</li>	
 					<li>
 						<em>Date</em>
@@ -17,11 +21,11 @@ export const Payment = () => {
 					</li>
 					<li>
 						<em>Issuer</em>
-						<span>Miraz</span>
+						<span>{user?.firstname}</span>
 					</li>
 					<li>
 						<em>Invoice Number</em>
-						<span>AEZ564K458</span>
+						<span>{user?.phone}</span>
 					</li>
 				</ul>
 			</div>

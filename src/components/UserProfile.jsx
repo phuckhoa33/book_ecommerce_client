@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Image, Button, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Form, Image, Button, InputGroup, Spinner } from 'react-bootstrap';
+import { useUserContext } from '../context/userContext';
+import { updateUser } from '../store/store';
+import { toast } from 'react-toastify';
 
 const UserProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [hover, setHover] = useState(false);
-  const [profile, setProfile] = useState({
-    first_name: "",
-    last_name: "",
-    password: "",
-    email: "",
-    image: ""
-  })
-  const [user, setUser] = useState({});
+  const {user, updateUserContext} = useUserContext();
+  const [loading, setLoading] = useState(false);
 
-//   useEffect(() => {
-//     setProfile(
-//       {...profile, 
-//         image: user['image']?user['image']:"https://via.placeholder.com/150",
-//       }
-//     )
-//     return () => {}
-//   },[])
+  const [profile, setProfile] = useState({
+    firstname: user?.firstname,
+    lastname: user?.lastname,
+    email: user?.email,
+    password: user?.password,
+    iamge: user?.image
+  });
 
   const {first_name, last_name, password, email, image} = profile;
 
@@ -34,26 +30,17 @@ const UserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // profile.code = user['code'];
-    // let form = parseTypeArray(profile);
-    // const {data} = await update_profile(form);
-    // alert(data.message);
-    // setProfile(data.user);
-    // setUser(data.user);
-    // cookies.set('user', data.user);
+    setLoading(true);
+    const {data} = await updateUser(profile);
+    setLoading(false);
+    if(data.data==="Update is successfully"){
+      updateUserContext(profile);
+      toast.success("Update is successfully");
+    }
   }
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        console.log(reader.result);
-        setProfile({...profile, iamge: reader.result})
-      };
-      reader.readAsDataURL(file);
-    }
+    
   };
 
   return (
@@ -89,15 +76,15 @@ const UserProfile = () => {
             <Form>
               <Form.Group controlId="firstName">
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" name='first_name' value={first_name} onChange={handleChange} placeholder={user['first_name']} />
+                <Form.Control type="text" name='first_name' value={first_name} onChange={handleChange} />
               </Form.Group>
               <Form.Group controlId="lastName">
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" name='last_name' value={last_name} onChange={handleChange} placeholder={user['last_name']} />
+                <Form.Control type="text" name='last_name' value={last_name} onChange={handleChange} />
               </Form.Group>
               <Form.Group controlId="email">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name='email' value={email} onChange={handleChange} placeholder={user['email']} />
+                <Form.Control type="email" name='email' value={email} onChange={handleChange} />
               </Form.Group>
               <Form.Group controlId="password">
                 <Form.Label>Password</Form.Label>
@@ -109,7 +96,7 @@ const UserProfile = () => {
                 </InputGroup>
               </Form.Group>
               <Button onClick={handleSubmit} variant="primary" type="submit">
-                Luu
+                {loading ? (<Spinner/>): "Save"}
               </Button>
             </Form>
           </Col>

@@ -5,8 +5,15 @@ import saveMoney from '../images/features/f3.png';
 import promotions from '../images/features/f4.png';
 import happySell from '../images/features/f5.png';
 import support from '../images/features/f6.png';
-
+import { useBookContext } from '../context/bookContext';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSwatchbook } from "@fortawesome/free-solid-svg-icons";
 export const Home = () => {
+    const {books} = useBookContext();
+    const navigate = useNavigate();
+
+
     return (
         <>
         <main>
@@ -15,7 +22,7 @@ export const Home = () => {
                 <h2>Super value deals</h2>
                 <h1>On all products</h1>
                 <p>save more coupons & up to 70% off!</p>
-                <button>Shop now</button>
+                <button onClick={() => navigate("/books/none/none/none")}>Shop now</button>
             </section>
 
             <section id="features" class="section-p1">
@@ -46,246 +53,58 @@ export const Home = () => {
             </section>
 
             <section class="product-section section-p1">
-                <h1>Featured Products</h1>
-                <p>Summer Collection New Morden Design</p>
+                <h1>Honor General</h1>
+                <p>New experience about honor world</p>
                 <div class="pro-collection">
-                <div class="product-cart">
-                    <img src="images/products/f1.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f2.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f3.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f4.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f5.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f6.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f7.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/f8.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
+                    {books?.slice(0, 9)?.map(book => (
+                        <div class="product-cart" style={{cursor: "pointer"}}>
+                            <img src={book.image} alt="product image" />
+                            <span>{book.publisher}</span>
+                            <h4>{book.title}</h4>
+                            <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h4 class="price">${book.price}</h4>
+                            <a href="#">
+                                <FontAwesomeIcon onClick={() => navigate(`/book/${book.id}`)} icon={faSwatchbook}/>
+                            </a>
+                        </div>
+
+                    ))}
                 </div>
             </section>
 
             <section id="off-banner section-m1">
-                <h4>Repaire Services</h4>
-                <h2>Up to 70% Off - All t-Shirts & Accessories</h2>
+                <h4>Watch more about discount lable</h4>
+                <h2>Many discount you must explore</h2>
                 <button class="normal">Explore More</button>
             </section>
 
             <section class="product-section section-p1">
-                <h1>New Arrivals</h1>
-                <p>Summer Collection New Morden Design</p>
+                <h1>Science Fictions</h1>
+                <p>Enough new for a sciece world</p>
                 <div class="pro-collection">
-                <div class="product-cart">
-                    <img src="images/products/n1.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
+                {books?.slice(9, 17)?.map(book => (
+                    <div class="product-cart" style={{cursor: "pointer"}}>
+                        <img src={book.image} alt="product image" />
+                        <span>{book.publisher}</span>
+                        <h4>{book.title}</h4>
+                        <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        </div>
+                        <h4 class="price">${book.price}</h4>
+                        <a href="#"><FontAwesomeIcon onClick={() => navigate(`/book/${book.id}`)} icon={faSwatchbook}/></a>
                     </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n2.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n3.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n4.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n5.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n6.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n7.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
-                <div class="product-cart">
-                    <img src="images/products/n8.jpg" alt="product image" />
-                    <span>adidas</span>
-                    <h4>Cartoon Astronaut T-Shirts</h4>
-                    <div class="stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    </div>
-                    <h4 class="price">$78</h4>
-                    <a href="#"><i class="fa-solid fa-cart-shopping buy-icon"></i></a>
-                </div>
+
+                    ))}
                 </div>
             </section>
 
@@ -294,28 +113,28 @@ export const Home = () => {
                 <div class="big-banners-1">
                     <h4>crazy deals</h4>
                     <h2>buy 1 get 1 free</h2>
-                    <span>The best classic dress is on sale at coro</span>
+                    <span>The most discount for you</span>
                     <button class="banner-btn">Learn More</button>
                 </div>
                 <div class="big-banners-2">
                     <h4>spring/summer</h4>
                     <h2>upcomming season</h2>
-                    <span>The best classic dress is on sale at cara</span>
+                    <span>The best collection for you</span>
                     <button class="banner-btn">Collection</button>
                 </div>
                 </div>
                 <div class="small-banners">
                 <div class="small-banners-1">
                     <h2>SEASONAL SALE</h2>
-                    <h5>Winter Collection 50% Off</h5>
+                    <h5>Old book</h5>
                 </div>
                 <div class="small-banners-2">
-                    <h2>NEW FOOTWEAR COLLECTION</h2>
+                    <h2>NEW BOOK COLLECTION</h2>
                     <h5>Spring/Summer 2022</h5>
                 </div>
                 <div class="small-banners-3">
-                    <h2>T-SHIRTS</h2>
-                    <h5>New Trendy Prints</h5>
+                    <h2>Honor</h2>
+                    <h5>New Trendy Book</h5>
                 </div>
                 </div>
             </section>

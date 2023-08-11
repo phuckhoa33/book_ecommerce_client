@@ -16,32 +16,44 @@ import { Contact } from './pages/Contact';
 import { Payment } from './pages/PaymentPage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BookProvider } from './context/bookContext';
+import { CartProvider } from './context/cartContext';
+import { UserProvider } from './context/userContext';
 
 
 function App() {
   return (
-    <div className="App">
-      <ToastContainer/>
-      <Router>
-          <Routes>
-            <Route element={<PageLayout/>}>
-              <Route path='/' element={<Home/>}/>
-              <Route path='/book/:bookId' element={<Book/>}/>
-              <Route path='/books' element={<Books/>}/>
-              <Route path='/cart' element={<Cart/>}/>
-              <Route path='/profile/:userId' element={<Profile/>}/>
-              <Route path='/forgotPassword' element={<ResetPassword/>}/>
-              <Route path='/auth' element={<Authentication/>}/>
-              <Route path='/createNewPassword' element={<ResetPasswordForm/>}/>
-              <Route path='/aboutUs' element={<AboutUs/>}/>
-              <Route path='/contact' element={<Contact/>}/>
+    <BookProvider>
+      <UserProvider>
+        <CartProvider>
+          <div className="App">
+            <ToastContainer/>
+            <Router>
+                <Routes>
+                  <Route element={<PageLayout/>}>
+                    <Route path='/' element={<Home/>}/>
+                    <Route path='/book/:bookId' element={<Book/>}/>
+                    <Route path='/books/:category/:author' element={<Books/>}/>
+                    <Route path='/cart' element={<Cart/>}/>
+                    <Route path='/profile/:email' element={<Profile/>}/>
+                    <Route path='/forgotPassword' element={<ResetPassword/>}/>
+                    <Route path='/auth' element={<Authentication/>}/>
+                    <Route path='/createNewPassword' element={<ResetPasswordForm/>}/>
+                    <Route path='/aboutUs' element={<AboutUs/>}/>
+                    <Route path='/contact' element={<Contact/>}/>
 
-            </Route>
-            <Route path='/payment/:sessionId/:userId' element={<Payment/>}/>
-            <Route path='*' element={<Error404/>}/>
-          </Routes>
-      </Router>
-    </div>
+                  </Route>
+                  <Route path='/payment/:sessionId/:userId' element={<Payment/>}/>
+                  <Route path='*' element={<Error404/>}/>
+                </Routes>
+            </Router>
+          </div>
+
+        </CartProvider>
+
+      </UserProvider>
+
+    </BookProvider>
   );
 }
 

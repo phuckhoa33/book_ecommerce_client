@@ -3,6 +3,8 @@ import { Form, Button } from 'react-bootstrap';
 import '../styles/createNewPassword.css'; // Import file CSS tùy chỉnh
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import { toast } from 'react-toastify';
+import { updateUser } from '../store/store';
  
 const cookies = new Cookies();
 
@@ -12,7 +14,8 @@ function ResetPasswordForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!cookies.get('userPassword')){
+    const user = cookies.get('userPassword');
+    if(user===null){
       navigate("errorSoMan");
     }
   }, [])
@@ -25,13 +28,26 @@ function ResetPasswordForm() {
     setConfirmNewPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     // Thực hiện xử lý reset password tại đây
     if (newPassword === confirmNewPassword) {
       // Gửi dữ liệu đi hoặc thực hiện hành động cần thiết
+      const user = cookies.get("userPassword");
+      user.password = newPassword;
+      const {data} = await updateUser(user);
+      console.log(data);
+      if(data.data==="Update is successfully"){
+        toast.success("Update is successfully");
+        cookies.remove("userPassword");
+        navigate("/auth");
+      }
+      else {
+        toast.error("Sorry, my websiter have some error");
+      }
+      
     } else {
-      alert('Passwords do not match');
+      toast.warn('Passwords do not match');
     }
   };
 

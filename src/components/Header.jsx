@@ -4,22 +4,26 @@ import logo from "../images/logo.png";
 import '../styles/header.css';
 import { faBell, faCartArrowDown, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from 'universal-cookie';
+import { useBookContext } from "../context/bookContext";
+import { useUserContext } from "../context/userContext";
+    
+const cookies = new Cookies();
 
 export const Header = () => {
     const navigate = useNavigate();
-    const [toolboxOpen, setToolboxOpen] = useState(false);
-    const [toolboxNotiOpen, setToolboxNotiOpen] = useState(false);
+    const {categories} = useBookContext();
     const [notifications, setNotifications] = useState([
         "Thông báo 1",
         "Thông báo 2",
         "Thông báo 3",
     ]);
 
-    const toggleToolbox = (func, state, extra) => {
-        func(!state);
-        extra(false);
-    };
+    const {user, handleLogout} = useUserContext();
+    const [search, setSearch] = useState("");
+
+
     return (
         <>
             <nav class="navbar navbar-expand-lg navbar-light bg-light container-fruid header" id="header">
@@ -39,18 +43,17 @@ export const Header = () => {
                         <a onClick={() => navigate("/")} class="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Category
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><hr class="dropdown-divider"/></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Category
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {categories?.map(category => (
+                                    <li><a class="dropdown-item" href="#" onClick={() => navigate(`/books/${category.id}/${"none"}/${search}`)}>{category.name}</a></li>
+                                ))}
+                            </ul>
                         </li>
                         <li class="nav-item">
-                        <a onClick={() => navigate("/books")} class="nav-link active" aria-current="page" href="#">Books</a>
+                        <a onClick={() => navigate("/books/none/none")} class="nav-link active" aria-current="page" href="#">Books</a>
                         </li>
                         <li class="nav-item">
                         <a onClick={() => navigate("/aboutUs")} class="nav-link active" aria-current="page" href="#">About Us</a>
@@ -60,43 +63,55 @@ export const Header = () => {
                         </li>
                     </ul>
                     <form class="d-flex mt-3">
-                        <input style={{width: "45vh"}} class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search"/>
+                        <input style={{width: "45vh"}} value={search} onChange={(e) => setSearch(e.target.value)} class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search"/>
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <ul class="navbar-nav account" id="personality">
-                        <li class="nav-item">
-                            <a class="nav-link active account-tag" onClick={() => toggleToolbox(setToolboxNotiOpen, toolboxNotiOpen, setToolboxOpen)} href="#">
-                                <FontAwesomeIcon icon={faBell}/>  
-                                <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                            </a>
-                            {toolboxNotiOpen && (
-                                <div className="toolbox">
-                                    {notifications?.map((notification) => (
-                                        <a href="#">{notification}</a>
-                                    ))}
-                                </div>
-                            )}
-                        </li>
-                        <li onClick={() => {
-                            navigate("/cart")
-                            setToolboxNotiOpen(false);
-                            setToolboxOpen(false);
-                        }} class="nav-item account">
-                            <a class="nav-link" href="#">
-                                <FontAwesomeIcon icon={faCartArrowDown}/>
-                                <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                            </a>
-                        </li>
-                        <li class="nav-item account">
-                            <a class="nav-link account-tag" href="#"  onClick={() => toggleToolbox(setToolboxOpen, toolboxOpen, setToolboxNotiOpen)}>
-                                <FontAwesomeIcon icon={faUser}/>
-                            </a>
-                            {toolboxOpen && (
-                                <div className="toolbox">
-                                <a onClick={() => navigate("/auth")} href="#">Logout</a>
-                                <a onClick={() => navigate("/profile/8")} href="#">profile</a>
-                                </div>
-                            )}
+                        {user && (
+                            <>
+                                <li onClick={() => {
+                                    navigate("/cart")
+                                }} class="nav-item account ">
+                                    <a class="nav-link" href="#">
+                                        <FontAwesomeIcon icon={faCartArrowDown}/>
+                                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                                    </a>
+                                </li>
+                            
+                                <li class="dropdown nav-item">
+                                    <button class="dropdown-toggle btn btn-secondary"  id="testDropdown" type="button" data-bs-toggle="dropdown">
+                                        <FontAwesomeIcon icon={faBell}/>
+                                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {notifications?.map((notification) => (
+                                            <li><a class="dropdown-item" href="#">{notification}</a></li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            </>
+                        )}
+                        <li class="dropdown nav-item">
+                            <button class="btn btn-secondary dropdown-toggle" id="testDropdown" type="button" data-bs-toggle="dropdown">
+                            <FontAwesomeIcon icon={faUser}/>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {user ? (
+                                    <>
+                                        <li><a class="dropdown-item" onClick={() => navigate(`/profile/${cookies.get("user")?.email}`)} href="#">Profile</a></li>
+                                        <li><a class="dropdown-item" href="#">Setting</a></li>
+                                        <li><hr class="dropdown-divider"/></li>
+                                        <li><a class="dropdown-item" href="#"onClick={() => {
+                                                        handleLogout();
+                                                        navigate("/auth");
+                                                    }}>Logout</a>
+                                        </li>
+                                    
+                                    </>
+                                ): (
+                                    <li onClick={() => navigate("/auth")}><a class="dropdown-item" href="#">Login</a></li>
+                                )}
+                            </ul>
                         </li>
                     </ul>
                     </div>

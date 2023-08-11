@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import '../styles/paymentHistory.scss';
-import $ from 'jquery';
 
 export const PaymentHistory = () => {
     useEffect(() => {}, [])

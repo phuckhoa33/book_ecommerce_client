@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { login, register } from '../store/store';
 import { Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import Cookies from 'universal-cookie';
- 
-const cookies = new Cookies();
+import { useUserContext } from '../context/userContext';
 
 export const Authentication = () => {
     const navigate = useNavigate();
+    const {handleAuthentication} = useUserContext();
     // Create state
     const [formLogin, setFormLogin] = useState({
         emailLogin: "",
@@ -52,7 +51,7 @@ export const Authentication = () => {
         const message = data.data.message;
         if(message==="Login is successfuly"){
             toast.success(message);
-            cookies.set("user", data.data.user);
+            handleAuthentication(data.data.user);
             navigate("/");
             return;
         }
@@ -80,7 +79,7 @@ export const Authentication = () => {
         const message = data.data.message;
         if(message==="Register is successfully"){
             toast.success(message);
-            cookies.set("user", data.data.user);
+            handleAuthentication(data.data.user);
             navigate("/");
             return;
         }

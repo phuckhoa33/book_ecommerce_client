@@ -4,6 +4,7 @@ import '../styles/profile.css';
 import UserProfile from '../components/UserProfile';
 import { PaymentHistory } from '../components/PaymentHistory';
 
+
 function Profile() {
   const [activeTab, setActiveTab] = useState('personalInfo');
 

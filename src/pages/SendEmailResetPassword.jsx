@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { getUserByEmail, sendEmailResetPassword } from '../store/store';
 import Cookies from 'universal-cookie';
- 
+
 const cookies = new Cookies();
 
 
@@ -28,6 +28,10 @@ export const ResetPassword = () => {
         Promise.all([getUserByEmailProcess, sendEmailProcess]);
         setLoading(false);
         if(sendEmailProcess.data.message==="Success to call API GetAllUsers"){
+            if(getUserByEmailProcess.data.data===null){
+                toast.error("Your email is not exist with a certain account in my website");
+                return;
+            }
             setValue("Oh Yeah");
         }
         cookies.set("userPassword", getUserByEmailProcess.data.data);

@@ -1,9 +1,29 @@
 import '../styles/books.scss';
+import { useBookContext } from '../context/bookContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Books = () => {
+    const {category, author} = useParams();
+    const navigate = useNavigate();
+    const {books, categories, setPage, pageAmount, paginationBooks, page} = useBookContext();
+    const [filteredBooks, setFilterBooks] = useState(books);
+    
+
+    useEffect(() => {
+        
+    }, [])
+
+    const handleSwitchPage = (number) => {
+        setPage(number);
+    }
+
+
     return (
         <>
-            <section className="product-category-page">
+            <section className="product-category-page" style={{marginTop: "10vh"}}>
                 <div className="container">
                     <div className="products-filter-wrapper mb-4">
                     <button className="btn link-as-btn filter-toggle-btn">
@@ -22,7 +42,7 @@ export const Books = () => {
                         </div>
                         <div className="category-filter-wrapper__body">
                             <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Brand</div>
+                            <div className="category-filter__title --md">Author</div>
                             <div className="category-filter__content mb-4">
                                 <div className="custom-control custom-checkbox mb-2">
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" name="example1"/>
@@ -40,24 +60,27 @@ export const Books = () => {
                             <a className="link-as-btn">View More</a>
                             </div>
                             <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Service</div>
+                            <div className="category-filter__title --md">Category</div>
                             <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="cashOnDelivery" name="cashOnDelivery"/>
-                                <label className="custom-control-label" for="cashOnDelivery">Cash On Delivery</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="freeShipping" name="freeShipping"/>
-                                <label className="custom-control-label" for="freeShipping">Free Shipping</label>
-                                </div>
+                                {categories?.map(category => (
+                                    <div className="custom-control custom-checkbox mb-2">
+                                        <input type="checkbox" className="custom-control-input" id="cashOnDelivery" name="cashOnDelivery"/>
+                                        <label className="custom-control-label" for="cashOnDelivery">{category?.name}</label>
+                                    </div>
+
+                                ))}
                             </div>
                             </div>
                             <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Location</div>
+                            <div className="category-filter__title --md">Time</div>
                             <div className="category-filter__content">
                                 <div className="custom-control custom-checkbox mb-2">
                                 <input type="checkbox" className="custom-control-input" id="kathmanduLocation" name="kathmanduLocation"/>
-                                <label className="custom-control-label" for="kathmanduLocation">Kathmandu</label>
+                                <label className="custom-control-label" for="kathmanduLocation">Newest</label>
+                                </div>
+                                <div className="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" className="custom-control-input" id="kathmanduLocation" name="kathmanduLocation"/>
+                                <label className="custom-control-label" for="kathmanduLocation">Oldest</label>
                                 </div>
                             </div>
                             </div>
@@ -96,147 +119,8 @@ export const Books = () => {
                                 </div>
                                 <div className="price-filter__item">
                                     <div className="send-btn-icon">
-                                    <i className="fas fa-paper-plane"></i>
+                                        <FontAwesomeIcon icon={faFilter}/>
                                     </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Warranty Type</div>
-                            <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="noWarranty" name="noWarranty"/>
-                                <label className="custom-control-label" for="noWarranty">No Warranty</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="sellerWarranty" name="sellerWarranty"/>
-                                <label className="custom-control-label" for="sellerWarranty">Seller Warranty</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="originalProduct" name="originalProduct"/>
-                                <label className="custom-control-label" for="originalProduct">100 % original product</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="brandWarranty" name="brandWarranty"/>
-                                <label className="custom-control-label" for="brandWarranty">Brand Warranty</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="localSellerWarranty" name="localSellerWarranty"/>
-                                <label className="custom-control-label" for="localSellerWarranty">Local seller warranty</label>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Color Family</div>
-                            <div className="category-filter__content">
-                                <div className="color-family-checkbox-list">
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="Teal" name="Teal"/>
-                                    <label className="custom-control-label" for="Teal">
-                                    <i style={{color: "teal"}} className="fas fa-circle mr-3"></i>Teal</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="Maroon" name="Maroon"/>
-                                    <label className="custom-control-label" for="Maroon">
-                                    <i style={{color: "Maroon"}} className="fas fa-circle mr-3"></i>Maroon</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="Red" name="Red"/>
-                                    <label className="custom-control-label" for="Red">
-                                    <i style={{color: "Red"}} className="fas fa-circle mr-3"></i>Red</label>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Warranty Period</div>
-                            <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="oneYear" name="oneYear"/>
-                                <label className="custom-control-label" for="oneYear">1</label>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Pack Type</div>
-                            <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="singleItemPackType" name="singleItemPackType"/>
-                                <label className="custom-control-label" for="singleItemPackType">Single Item</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="multiItemPackType" name="multiItemPackType"/>
-                                <label className="custom-control-label" for="multiItemPackType">Multi Item</label>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Travel Size</div>
-                            <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="regularTravelSize" name="regularTravelSize"/>
-                                <label className="custom-control-label" for="regularTravelSize">Regular size</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="travelTravelSize" name="travelTravelSize"/>
-                                <label className="custom-control-label" for="travelTravelSize">Travel size</label>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper size-standard-wrapper">
-                            <div className="category-filter__title --md">Size</div>
-                            <div className="category-filter__content">
-                                <div className="select-input form-group">
-                                <select className="form-control" id="sizeType">
-                                    <option value="0" selected="true">EU</option>
-                                    <option value="uk">UK</option>
-                                    <option value="usa">USA</option>
-                                </select>
-                                </div>
-                                <div className="size-standard-checkbox-list">
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="22" name="22"/>
-                                    <label className="custom-control-label" for="22">22</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="23" name="23"/>
-                                    <label className="custom-control-label" for="23">23</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="24" name="24"/>
-                                    <label className="custom-control-label" for="24">24</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                    <input type="checkbox" className="custom-control-input" id="25" name="25"/>
-                                    <label className="custom-control-label" for="25">25</label>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div className="category-filter__item-wrapper size-type-wrapper">
-                            <div className="category-filter__title --md">Size</div>
-                            <div className="category-filter__content">
-                                <div className="size-type-checkbox-list">
-                                <div className="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" className="custom-control-input" id="small" name="small"/>
-                                    <label className="custom-control-label" for="small">S</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" className="custom-control-input" id="medium" name="medium"/>
-                                    <label className="custom-control-label" for="medium">M</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" className="custom-control-input" id="large" name="large"/>
-                                    <label className="custom-control-label" for="large">L</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" className="custom-control-input" id="xl" name="xl"/>
-                                    <label className="custom-control-label" for="xl">XL</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" className="custom-control-input" id="xxl" name="xxl"/>
-                                    <label className="custom-control-label" for="xxl">XXL</label>
                                 </div>
                                 </div>
                             </div>
@@ -246,113 +130,58 @@ export const Books = () => {
                     </div>
                     <div className="product-main-container col-12 col-md-8 col-lg-9">
                         <div className="products-item-container">
-                        <a className="card product-item-wrapper">
-                            <figure className="product-item-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80" alt="image"/>
-                            </figure>
-                            <div className="product-body">
-                            <div className="product-rating mb-2">
-                                <div className="rating-holder">
-                                <div className="c-rating c-rating--big" data-rating-value="4">
-                                    <button>1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>4</button>
-                                    <button>5</button>
-                                </div>
-                                </div>
-                            </div>
-                            <p className="product-name">Nike Shoes
-                            </p>
-                            <h3 className="product-price">Rs. 3,400</h3>
-                            </div>
-                            <div className="product-item-badge new">New</div>
-                        </a><a className="card product-item-wrapper">
-                            <figure className="product-item-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80" alt="image"/>
-                            </figure>
-                            <div className="product-body">
-                            <div className="product-rating mb-2">
-                                <div className="rating-holder">
-                                <div className="c-rating c-rating--big" data-rating-value="4">
-                                    <button>1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>4</button>
-                                    <button>5</button>
-                                </div>
-                                </div>
-                            </div>
-                            <p className="product-name">Nike Shoes
-                            </p>
-                            <h3 className="product-price">Rs. 3,400</h3>
-                            </div>
-                            <div className="product-item-badge new">New</div>
-                        </a><a className="card product-item-wrapper">
-                            <figure className="product-item-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80" alt="image"/>
-                            </figure>
-                            <div className="product-body">
-                            <div className="product-rating mb-2">
-                                <div className="rating-holder">
-                                <div className="c-rating c-rating--big" data-rating-value="4">
-                                    <button>1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>4</button>
-                                    <button>5</button>
-                                </div>
-                                </div>
-                            </div>
-                            <p className="product-name">Nike Shoes
-                            </p>
-                            <h3 className="product-price">Rs. 3,400</h3>
-                            </div>
-                            <div className="product-item-badge new">New</div>
-                        </a><a className="card product-item-wrapper">
-                            <figure className="product-item-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80" alt="image"/>
-                            </figure>
-                            <div className="product-body">
-                            <div className="product-rating mb-2">
-                                <div className="rating-holder">
-                                <div className="c-rating c-rating--big" data-rating-value="4">
-                                    <button>1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>4</button>
-                                    <button>5</button>
-                                </div>
-                                </div>
-                            </div>
-                            <p className="product-name">Nike Shoes
-                            </p>
-                            <h3 className="product-price">Rs. 3,400</h3>
-                            </div>
-                            <div className="product-item-badge new">New</div>
-                        </a><a className="card product-item-wrapper">
-                            <figure className="product-item-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80" alt="image"/>
-                            </figure>
-                            <div className="product-body">
-                            <div className="product-rating mb-2">
-                                <div className="rating-holder">
-                                <div className="c-rating c-rating--big" data-rating-value="4">
-                                    <button>1</button>
-                                    <button>2</button>
-                                    <button>3</button>
-                                    <button>4</button>
-                                    <button>5</button>
-                                </div>
-                                </div>
-                            </div>
-                            <p className="product-name">Nike Shoes
-                            </p>
-                            <h3 className="product-price">Rs. 3,400</h3>
-                            </div>
-                            <div className="product-item-badge new">New</div>
-                        </a>
+                            {paginationBooks?.map(book => (
+                                <>
+                                    <a className="card product-item-wrapper">
+                                        <figure className="product-item-img-wrapper">
+                                        <img src={book?.image} alt="image"/>
+                                        </figure>
+                                        <div className="product-body">
+                                        <div className="product-rating mb-2">
+                                            <div className="rating-holder">
+                                            <div className="c-rating c-rating--big" data-rating-value="4">
+                                                <button>1</button>
+                                                <button>2</button>
+                                                <button>3</button>
+                                                <button>4</button>
+                                                <button>5</button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <p onClick={() => navigate(`/book/${book?.id}`)} className="product-name">{book?.title}
+                                        </p>
+                                        <h3 className="product-price">${book?.price}</h3>
+                                        </div>
+                                        {/* <div className="product-item-badge new">New</div> */}
+                                    </a>
+                                </>
+                            ))}
                         </div>
+                        <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li onClick={() => handleSwitchPage(page-1)} class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            {pageAmount>8 ? (
+                                <>
+                                    <li onClick={() => handleSwitchPage(1)} class="page-item"><a class="page-link" href="#">{1}</a></li>
+                                    <li onClick={() => handleSwitchPage(2)} class="page-item"><a class="page-link" href="#">{2}</a></li>
+                                    <li onClick={() => handleSwitchPage(3)} class="page-item"><a class="page-link" href="#">{3}</a></li>
+                                    <li className="page-item"><a href="#" className="page-link">...</a></li>
+                                    <li onClick={() => handleSwitchPage(pageAmount-2)} class="page-item"><a class="page-link" href="#">{pageAmount-2}</a></li>
+                                    <li onClick={() => handleSwitchPage(pageAmount-1)} class="page-item"><a class="page-link" href="#">{pageAmount-1}</a></li>
+                                    <li onClick={() => handleSwitchPage(pageAmount)} class="page-item"><a class="page-link" href="#">{pageAmount}</a></li>
+                                </>
+                            ): (
+                                <>
+                                    {Array(pageAmount).fill(0).map((value, index) => (
+                                        <li onClick={() => handleSwitchPage(index+1)} class="page-item"><a class="page-link" href="#">{index+1}</a></li>
+        
+                                    ))}
+                                </>
+
+                            )}
+                            <li onClick={() => handleSwitchPage(page+1)} class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                        </nav>
                     </div>
                     </div>
                 </div>
