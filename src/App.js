@@ -23,17 +23,18 @@ import { UserProvider } from './context/userContext';
 
 function App() {
   return (
-    <BookProvider>
-      <UserProvider>
-        <CartProvider>
-          <div className="App">
-            <ToastContainer/>
-            <Router>
+    <div className="App">
+      <ToastContainer/>
+      <Router>
+          <BookProvider>
+            <UserProvider>
+              <CartProvider>
+
                 <Routes>
                   <Route element={<PageLayout/>}>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/book/:bookId' element={<Book/>}/>
-                    <Route path='/books/:category/:author' element={<Books/>}/>
+                    <Route path='/books/:category/:author/:search' element={<Books/>}/>
                     <Route path='/cart' element={<Cart/>}/>
                     <Route path='/profile/:email' element={<Profile/>}/>
                     <Route path='/forgotPassword' element={<ResetPassword/>}/>
@@ -46,14 +47,14 @@ function App() {
                   <Route path='/payment/:sessionId/:userId' element={<Payment/>}/>
                   <Route path='*' element={<Error404/>}/>
                 </Routes>
-            </Router>
-          </div>
+              </CartProvider>
 
-        </CartProvider>
+            </UserProvider>
+          </BookProvider>
+      </Router>
+    </div>
 
-      </UserProvider>
-
-    </BookProvider>
+    
   );
 }
 

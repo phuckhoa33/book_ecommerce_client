@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getBooks, getCategories } from "../store/store";
-
+import { getBookDependOnAuthor, getBookDependOnCategoryid, getBooks, getCategories } from "../store/store";
 const BookContext = createContext();
 
 export const BookProvider = ({children}) => {
@@ -10,35 +9,73 @@ export const BookProvider = ({children}) => {
     const [paginationBooks, setPaginationBooks] = useState([]);
     const [page, setPage] = useState(1);
     const [pageAmount, setPageAmount] = useState(0);
+    const [booksPage, setBooksPage] = useState([]);
+    const [authors, setAuthors] = useState([]);
 
     useEffect(() => {
         const handleFetchDataFromServer = async() => {
-            const getBooksProcess = await getBooks();
+            let getBooksProcess = await getBooks();
             const getCategoriesAndBookCategoriesProcess = await getCategories();
             Promise.all([getBooksProcess, getCategoriesAndBookCategoriesProcess]);
             setBooks(getBooksProcess.data.data);
             setCategories(getCategoriesAndBookCategoriesProcess.data.data.categories);
             setBookCategories(getCategoriesAndBookCategoriesProcess.data.data.bookCategories);
-        }
-        handleFetchDataFromServer();
 
+            const uniqueAuthors = [...new Set(getBooksProcess?.data?.data?.map(item => item.author))];
+
+            // Tạo mảng mới với các đối tượng có thuộc tính "author" duy nhất
+            const uniqueAuthorObjects = uniqueAuthors.map(author => ({
+                author: author,
+            }));
+
+            const objects = uniqueAuthorObjects.map(item => item.author);
+
+            setAuthors(objects);
+        }
+        
+        handleFetchDataFromServer();
     }, []);
 
     useEffect(() => {
-        setPageAmount(Math.ceil(books.length/8));
+        setPageAmount(Math.ceil(booksPage?.length/8));
         if(page<=0){
             setPage(1);
             return;
         }
-        else if(page > pageAmount){
-            setPage(pageAmount);
-            return;
-        }
         else {
             const endIndex = page*8;
-            setPaginationBooks(books.slice(endIndex-8, endIndex));
+            setPaginationBooks(booksPage?.slice(endIndex-8, endIndex));
         }
-    }, [page, books])
+        return () => {};
+    }, [booksPage, page]);
+
+    const handleFilterBooks = (categoryElemetnsCondition, authorCondition, dateCondtion, priceCondition) => {
+        let sameBooks = books;
+        if(categoryElemetnsCondition?.length >0){
+            const sameBookCategories = bookCategories?.filter(bookCategory => categoryElemetnsCondition.includes(""+bookCategory?.categoryid));
+            sameBooks = books?.filter(book => sameBookCategories?.map(item => item.bookid).includes(book?.id));
+            
+        }
+        let authorBooks = sameBooks;
+        if(authorCondition !== ''){
+            authorBooks = sameBooks.filter(book => book?.author === authorCondition);
+        }
+        let dateBooks = authorBooks;
+        if(dateCondtion === 'oldest'){
+            dateBooks = [...authorBooks].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        }
+        else if(dateCondtion === "newest"){
+            dateBooks = [...authorBooks].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+        }
+        let priceBooks = dateBooks;
+        // if(priceCondition[0] !== 0 && priceCondition[1] !== 0){
+        //     console.log(priceCondition);
+        //     priceBooks = dateBooks?.filter(book => book.price > priceCondition[0] && book.price < priceCondition[1]);
+        // }
+
+        setBooksPage(priceBooks);
+    }
 
 
 
@@ -51,7 +88,10 @@ export const BookProvider = ({children}) => {
             bookCategories,
             paginationBooks,
             page,
+            authors,
             setPage,
+            setBooksPage,
+            handleFilterBooks
 
         }}>
 

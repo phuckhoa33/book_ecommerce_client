@@ -1,35 +1,87 @@
 import '../styles/books.scss';
 import { useBookContext } from '../context/bookContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getBookDependOnAuthor, getBookDependOnCategoryid } from '../store/store';
 
 export const Books = () => {
-    const {category, author} = useParams();
     const navigate = useNavigate();
-    const {books, categories, setPage, pageAmount, paginationBooks, page} = useBookContext();
-    const [filteredBooks, setFilterBooks] = useState(books);
-    
+    const { categories, setPage, 
+            pageAmount, paginationBooks, 
+            page, setBooksPage, 
+            books, authors, handleFilterBooks
+        } = useBookContext();
+    const {author, category, search} = useParams();
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen1, setIsOpen1] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('');
+    const [selectedValue1, setSelectedValue1] = useState('');
+    const [categoryElements, setCategoryElements] = useState('');
+    const {startPrice, setStartPrice} = useState(0);
+    const {endPrice, setEndPrice} = useState(199);
+
+    const toggleDropdown = (funcState, state) => {
+        funcState(!state);
+    };
 
     useEffect(() => {
-        
-    }, [])
+        const handleFetchData = async() => {
+            if(author !== "none" && author !== undefined){
+                console.log(author);
+                const {data} = await getBookDependOnAuthor(author);
+                setBooksPage(data?.data);
+            }
+            else if(category !== "none" && category !== undefined){
+                const {data} = await getBookDependOnCategoryid(category);
+                setBooksPage(data?.data);
+            }
+            else if(search !== "none" && search !== undefined){
+                const a = await books?.filter(book => book?.title?.toLowerCase()?.startsWith(search?.toLowerCase()));
+                setBooksPage(a);
+            }
+            else {
+                setBooksPage(books);
+            }
+
+        }
+        handleFetchData();
+    }, [author, category, search]);
+    
 
     const handleSwitchPage = (number) => {
         setPage(number);
+        if(page > pageAmount){
+            setPage(pageAmount);
+        }
     }
 
+
+    const handleRadioChange = (event, setFunc) => {
+        setFunc(event.target.value);
+    };  
+
+    const handleCheckboxChange = (e) => {
+        const checked = e.target.checked;
+        if(checked){
+            setCategoryElements([...categoryElements,  e.target.value]);
+        }
+        else {
+            setCategoryElements(categoryElements?.filter(categoryElement => categoryElement !== e.target.value));
+        }
+    };
+
+    const handlePrice = (e, setFuc) => {
+        setFuc(e.target.value);
+    }
 
     return (
         <>
             <section className="product-category-page" style={{marginTop: "10vh"}}>
                 <div className="container">
-                    <div className="products-filter-wrapper mb-4">
-                    <button className="btn link-as-btn filter-toggle-btn">
-                        <i className="fas fa-filter mr-3"></i> Filter
-                    </button>
-                    </div>
 
                     <div className="product-category-wrapper row">
                     <div className="col-12 col-md-4 col-lg-3">
@@ -42,47 +94,70 @@ export const Books = () => {
                         </div>
                         <div className="category-filter-wrapper__body">
                             <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Author</div>
-                            <div className="category-filter__content mb-4">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="customCheck1" name="example1"/>
-                                <label className="custom-control-label" for="customCheck1">Nature's Essence</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="customCheck2" name="example2"/>
-                                <label className="custom-control-label" for="customCheck2">Enchanteur</label>
-                                </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="customCheck3" name="example3"/>
-                                <label className="custom-control-label" for="customCheck3">Joy</label>
-                                </div>
-                            </div>
-                            <a className="link-as-btn">View More</a>
-                            </div>
-                            <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Category</div>
-                            <div className="category-filter__content">
-                                {categories?.map(category => (
-                                    <div className="custom-control custom-checkbox mb-2">
-                                        <input type="checkbox" className="custom-control-input" id="cashOnDelivery" name="cashOnDelivery"/>
-                                        <label className="custom-control-label" for="cashOnDelivery">{category?.name}</label>
-                                    </div>
+                            <div className="category-filter__title --md dropdown-button" onClick={() => toggleDropdown(setIsOpen, isOpen)}>Author  <FontAwesomeIcon icon={faArrowDown}/></div>
+                            {isOpen && (
+                                <>
+                                    {authors?.map((author, index) => (
+                                        <>
+                                            <label key={index}>
+                                                <input
+                                                    type="radio"
+                                                    value={author}
+                                                    checked={selectedValue === author}
+                                                    onChange={e => handleRadioChange(e, setSelectedValue)}
+                                                />
+                                                {author}
+                                            </label>
+                                            <br />
+                                        </>
 
-                                ))}
-                            </div>
+                                    ))}
+                                </>
+
+                            )}
                             </div>
                             <div className="category-filter__item-wrapper">
-                            <div className="category-filter__title --md">Time</div>
-                            <div className="category-filter__content">
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="kathmanduLocation" name="kathmanduLocation"/>
-                                <label className="custom-control-label" for="kathmanduLocation">Newest</label>
+                            <div className="category-filter__title --md dropdown-button"  onClick={() => toggleDropdown(setIsOpen1, isOpen1)}>Category  <FontAwesomeIcon icon={faArrowDown}/></div>
+                            {isOpen1 && (
+                                <div className="category-filter__content">
+                                    {categories?.map(category => (
+                                        <div className="custom-control custom-checkbox mb-2">
+                                            <input type="checkbox" value={category?.id} onChange={handleCheckboxChange} className="custom-control-input" id="cashOnDelivery"/>
+                                            <label className="custom-control-label" htmlFor="cashOnDelivery">{category?.name}</label>
+                                        </div>
+
+                                    ))}
                                 </div>
-                                <div className="custom-control custom-checkbox mb-2">
-                                <input type="checkbox" className="custom-control-input" id="kathmanduLocation" name="kathmanduLocation"/>
-                                <label className="custom-control-label" for="kathmanduLocation">Oldest</label>
-                                </div>
+                            )}
                             </div>
+                            <div className="category-filter__item-wrapper">
+                            <div className="category-filter__title --md  dropdown-button"  onClick={() => toggleDropdown(setIsOpen2, isOpen2)}>Time  <FontAwesomeIcon icon={faArrowDown}/></div>
+                            {isOpen2 && (
+                                <div>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="newest"
+                                    checked={selectedValue1 === 'newest'}
+                                    onChange={e => handleRadioChange(e, setSelectedValue1)}
+                                  />
+                                    Newest
+                                </label>
+                                <br />
+                                <br />
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="oldest"
+                                    checked={selectedValue1 === 'oldest'}
+                                    onChange={e => handleRadioChange(e, setSelectedValue1)}
+                                  />
+                                  Oldest
+                                </label>
+                                <br />
+                              </div>
+
+                            )}
                             </div>
                             <div className="category-filter__item-wrapper price-wrapper">
                             <div className="category-filter__title --md">Price</div>
@@ -90,8 +165,8 @@ export const Books = () => {
                                 <div className="price-filter-wrapper">
                                 <div className="price-filter__item --min-price">
                                     <div className="select-input form-group">
-                                    <select className="form-control" id="minPrice">
-                                        <option value="0" selected="true">0</option>
+                                    <select value={startPrice} onChange={e =>  handlePrice(e, setStartPrice)} className="form-control" id="minPrice">
+                                        <option value="0">0</option>
                                         <option value="1000">1000</option>
                                         <option value="3000">3000</option>
                                         <option value="5000">5000</option>
@@ -106,7 +181,7 @@ export const Books = () => {
                                 </div>
                                 <div className="price-filter__item --max-price">
                                     <div className="select-input form-group">
-                                    <select className="form-control" id="maxPrice">
+                                    <select className="form-control" id="maxPrice" value={endPrice} onChange={e =>  handlePrice(e, setEndPrice)}>
                                         <option value="1000" selected="true">1000</option>
                                         <option value="10000">10000</option>
                                         <option value="20000">20000</option>
@@ -119,7 +194,7 @@ export const Books = () => {
                                 </div>
                                 <div className="price-filter__item">
                                     <div className="send-btn-icon">
-                                        <FontAwesomeIcon icon={faFilter}/>
+                                        <FontAwesomeIcon onClick={() => handleFilterBooks(categoryElements, selectedValue, selectedValue1, [0, 30])} icon={faFilter}/>
                                     </div>
                                 </div>
                                 </div>
@@ -172,7 +247,7 @@ export const Books = () => {
                                 </>
                             ): (
                                 <>
-                                    {Array(pageAmount).fill(0).map((value, index) => (
+                                    {Array(pageAmount)?.fill(0)?.map((value, index) => (
                                         <li onClick={() => handleSwitchPage(index+1)} class="page-item"><a class="page-link" href="#">{index+1}</a></li>
         
                                     ))}

@@ -49,7 +49,7 @@ export const Authentication = () => {
         const {data} = await login(formValue);
         setLoading(false);
         const message = data.data.message;
-        if(message==="Login is successfuly"){
+        if(message==="Login is successfuly" && data?.data?.user){
             toast.success(message);
             handleAuthentication(data.data.user);
             navigate("/");
@@ -77,7 +77,7 @@ export const Authentication = () => {
         const {data} = await register(formValue);
         setLoading(false);
         const message = data.data.message;
-        if(message==="Register is successfully"){
+        if(message==="Register is successfully" && data?.data?.user){
             toast.success(message);
             handleAuthentication(data.data.user);
             navigate("/");

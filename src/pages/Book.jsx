@@ -4,12 +4,14 @@ import { useBookContext } from '../context/bookContext';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCartContext } from '../context/cartContext';
+import { useUserContext } from '../context/userContext';
 
 export const Book = () => {
     const {bookId} = useParams();
     const navigate = useNavigate();
     const {books, bookCategories, categories} = useBookContext();
     const {cart} = useCartContext();
+    const {user} = useUserContext();
     const {addNewItemIntoCart} = useCartContext();
     const [book, setBook] = useState();
     const [relatedBooks, setRelatedBooks] = useState();
@@ -57,18 +59,25 @@ export const Book = () => {
     
     const handleAddIntoCart = (e) => {
         e.preventDefault();
-        if(quantity===0){
-            toast.warn("You must add item have quantity more 1");
-            return;
+        if(user){
+            if(quantity===0){
+                toast.warn("You must add item have quantity more 1");
+                return;
+            }
+            const newItem = {...book, quantity};
+            const duplicatedItem = cart?.find(book => book?.id==newItem?.id);
+            if(duplicatedItem){
+                toast.warn("This product have been added into your cart");
+                return;
+            }
+            addNewItemIntoCart(newItem);
+            navigate("/cart");
+
         }
-        const newItem = {...book, quantity};
-        const duplicatedItem = cart?.find(book => book?.id==newItem?.id);
-        if(duplicatedItem){
-            toast.warn("This product have been added into your cart");
-            return;
+        else {
+            toast.warn("You must login");
+            navigate("/auth");
         }
-        addNewItemIntoCart(newItem);
-        navigate("/cart");
     }
 
     return (
@@ -108,7 +117,7 @@ export const Book = () => {
                         </div>
                         <form id="AddToCartForm">
                             <ul>
-                                <li>Author: <a href="#" onClick={() => navigate(`/books/none/${book?.author}`)}>{book?.author}</a></li>
+                                <li>Author: <a href="#" onClick={() => navigate(`/books/none/${book?.author}/none`)}>{book?.author}</a></li>
                                 <li>Publisher: {book?.publisher}</li>
                                 <li>Supplier: {book?.supplier}</li>
                                 <li>MadeBy: {book?.madeby}</li>
@@ -117,7 +126,7 @@ export const Book = () => {
                                     <ul>
                                         Category:
                                         {category?.map(cate => (
-                                            <li><a href="#" onClick={() => navigate(`/books/${cate?.name}/none`)}>{cate?.name}</a></li>
+                                            <li><a href="#" onClick={() => navigate(`/books/${cate?.name}/none/none`)}>{cate?.name}</a></li>
                                         ))}
                                     </ul>
                                 </li>

@@ -17,11 +17,11 @@ export const Cart = () => {
     }
     return (
         <>
-            <div className="wrap cf">
+            <div className="wrap cf" style={{marginTop: "4vh"}}>
                 <h1 className="projTitle">Responsive Table<span>-Less</span> Shopping Cart</h1>
                 <div className="heading cf">
                     <h1>My Cart</h1>
-                    <a href="#" className="continue" onClick={() => navigate("/books/none/none")}>Continue Shopping</a>
+                    <a href="#" className="continue" onClick={() => navigate("/books/none/none/none")}>Continue Shopping</a>
                 </div>
                 <div className="cart">
                     <ul className="cartWrap">
@@ -50,78 +50,6 @@ export const Cart = () => {
                             </li>
 
                         ))}
-                    {/* <li className="items even">
-                        
-                    <div className="infoWrap"> 
-                        <div className="cartSection">
-                        
-                        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-                        <p className="itemNumber">#QUE-007544-002</p>
-                        <h3>Item Name 1</h3>
-                        
-                        <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-                        
-                        <p className="stockStatus"> In Stock</p>
-                        </div>  
-                    
-                        
-                        <div className="prodTotal cartSection">
-                        <p>$15.00</p>
-                        </div>
-                            <div className="cartSection removeWrap">
-                        <a href="#" className="remove">x</a>
-                        </div>
-                    </div>
-                    </li>
-                    
-                            <li className="items odd">
-                            <div className="infoWrap"> 
-                        <div className="cartSection">
-                            
-                        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-                        <p className="itemNumber">#QUE-007544-002</p>
-                        <h3>Item Name 1</h3>
-                        
-                        <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-                        
-                        <p className="stockStatus out"> Out of Stock</p>
-                        </div>  
-                    
-                        
-                        <div className="prodTotal cartSection">
-                        <p>$15.00</p>
-                        </div>
-                                    <div className="cartSection removeWrap">
-                        <a href="#" className="remove">x</a>
-                        </div>
-                            </div>
-                    </li>
-                    <li className="items even">
-                    <div className="infoWrap"> 
-                        <div className="cartSection info">
-                            
-                        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-                        <p className="itemNumber">#QUE-007544-002</p>
-                        <h3>Item Name 1</h3>
-                        
-                        <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-                        
-                        <p className="stockStatus"> In Stock</p>
-                        
-                        </div>  
-                    
-                        
-                        <div className="prodTotal cartSection">
-                        <p>$15.00</p>
-                        </div>
-                    
-                            <div className="cartSection removeWrap">
-                        <a href="#" className="remove">x</a>
-                        </div>
-                        </div>
-                        <div className="special"><div className="specialContent">Free gift with purchase!, gift wrap, etc!!</div></div>
-                    </li> */}
-                    
                 
                     </ul>
                 </div>
