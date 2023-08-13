@@ -4,7 +4,7 @@ import logo from "../images/logo.png";
 import '../styles/header.css';
 import { faBell, faCartArrowDown, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Cookies from 'universal-cookie';
 import { useBookContext } from "../context/bookContext";
 import { useUserContext } from "../context/userContext";
@@ -22,8 +22,9 @@ export const Header = () => {
     ]);
 
     const {user, handleLogout} = useUserContext();
-    const {resetCart} = useCartContext();
+    const {resetCart, cart} = useCartContext();
     const [search, setSearch] = useState("");
+    const {books} = useBookContext();
 
 
     const handleSearch = (e) => {
@@ -82,14 +83,14 @@ export const Header = () => {
                                 }} className="nav-item account ">
                                     <a className="nav-link" href="#">
                                         <FontAwesomeIcon icon={faCartArrowDown}/>
-                                        <span className="badge rounded-pill badge-notification bg-danger">1</span>
+                                        <span className="badge rounded-pill badge-notification bg-danger">{cart?.length}</span>
                                     </a>
                                 </li>
                             
                                 <li className="dropdown nav-item">
                                     <button className="dropdown-toggle btn btn-secondary"  id="testDropdown" type="button" data-bs-toggle="dropdown">
                                         <FontAwesomeIcon icon={faBell}/>
-                                        <span className="badge rounded-pill badge-notification bg-danger">1</span>
+                                        <span className="badge rounded-pill badge-notification bg-danger">{notifications.length}</span>
                                     </button>
                                     <ul className="dropdown-menu">
                                         {notifications?.map((notification) => (
@@ -112,7 +113,7 @@ export const Header = () => {
                                         <li><a className="dropdown-item" href="#"onClick={() => {
                                                         handleLogout();
                                                         navigate("/auth");
-                                                        resetCart();
+                                                        resetCart(books);
                                             
                                                     }}>Logout</a>
                                         </li>

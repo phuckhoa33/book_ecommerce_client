@@ -11,8 +11,9 @@ export const Books = () => {
     const { categories, setPage, 
             pageAmount, paginationBooks, 
             page, setBooksPage, 
-            books, authors, handleFilterBooks
-        } = useBookContext();
+            books, authors, 
+            handleFilterBooks, globalDiscount
+    } = useBookContext();
     const {author, category, search} = useParams();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -225,7 +226,17 @@ export const Books = () => {
                                         </div>
                                         <p onClick={() => navigate(`/book/${book?.id}`)} className="product-name">{book?.title}
                                         </p>
-                                        <h3 className="product-price">${book?.price}</h3>
+                                        <h3 className="product-price"> 
+                                            {globalDiscount>0 ? (
+                                                <>
+                                                    <del style={{color: "grey"}}>${book?.price} </del>
+                                                    ${globalDiscount>0 && (book?.price - (book?.price*globalDiscount/100))}
+                                                
+                                                </>
+                                            ): (
+                                                <>${book?.price}</>
+                                            )}
+                                        </h3>
                                         </div>
                                         {/* <div className="product-item-badge new">New</div> */}
                                     </a>

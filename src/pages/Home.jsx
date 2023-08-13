@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSwatchbook } from "@fortawesome/free-solid-svg-icons";
 export const Home = () => {
-    const {books} = useBookContext();
+    const {books, globalDiscount} = useBookContext();
     const navigate = useNavigate();
 
 
@@ -68,7 +68,17 @@ export const Home = () => {
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             </div>
-                            <h4 class="price">${book.price}</h4>
+                            <h4 class="price">
+                            {globalDiscount>0 ? (
+                                <>
+                                    <del style={{color: "grey"}}>${book?.price} </del>
+                                    ${book?.price - (book?.price*globalDiscount/100)}
+                                
+                                </>
+                            ): (
+                                <>${book?.price}</>
+                            )}
+                            </h4>
                             <a href="#">
                                 <FontAwesomeIcon onClick={() => navigate(`/book/${book.id}`)} icon={faSwatchbook}/>
                             </a>
@@ -100,7 +110,17 @@ export const Home = () => {
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
                         </div>
-                        <h4 class="price">${book.price}</h4>
+                        <h4 class="price">
+                        {globalDiscount>0 ? (
+                            <>
+                                <del style={{color: "grey"}}>${book?.price} </del>
+                                ${book?.price - (book?.price*globalDiscount/100)}
+                            
+                            </>
+                        ): (
+                            <>${book?.price}</>
+                        )}    
+                        </h4>
                         <a href="#"><FontAwesomeIcon onClick={() => navigate(`/book/${book.id}`)} icon={faSwatchbook}/></a>
                     </div>
 

@@ -32,6 +32,7 @@ export const getBook = (bookid) => API.get(`/book/${bookid}`);
 export const getBooks = () => API.get("/book");
 export const getBookDependOnCategoryid = (categoryid) => API.get(`/book/category/${categoryid}`);
 export const getBookDependOnAuthor = (author) => API.get(`/book/author/${author}`);
+export const updateQuantity = (formValue) => API.patch(`/book/quantity`, formValue);
 
 // User
 export const getUserById = (userid) => API.get(`/user/${userid}`);

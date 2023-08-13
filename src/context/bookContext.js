@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getBookDependOnAuthor, getBookDependOnCategoryid, getBooks, getCategories } from "../store/store";
+import { getBookDependOnAuthor, getBookDependOnCategoryid, getBooks, getCategories, getDiscounts } from "../store/store";
 const BookContext = createContext();
 
 export const BookProvider = ({children}) => {
@@ -11,12 +11,17 @@ export const BookProvider = ({children}) => {
     const [pageAmount, setPageAmount] = useState(0);
     const [booksPage, setBooksPage] = useState([]);
     const [authors, setAuthors] = useState([]);
+    const [discounts, setDiscounts] = useState([]);
+    const [globalDiscount, setGlobalDiscount] = useState();
+    const [intervalDiscount, setIntervalDiscount] = useState([]);
 
     useEffect(() => {
         const handleFetchDataFromServer = async() => {
-            let getBooksProcess = await getBooks();
+            const getBooksProcess = await getBooks();
             const getCategoriesAndBookCategoriesProcess = await getCategories();
-            Promise.all([getBooksProcess, getCategoriesAndBookCategoriesProcess]);
+            const getDiscountsProcess = await getDiscounts();
+            Promise.all([getBooksProcess, getCategoriesAndBookCategoriesProcess, getDiscountsProcess]);
+            setDiscounts(getDiscountsProcess.data.data);
             setBooks(getBooksProcess.data.data);
             setCategories(getCategoriesAndBookCategoriesProcess.data.data.categories);
             setBookCategories(getCategoriesAndBookCategoriesProcess.data.data.bookCategories);
@@ -29,12 +34,27 @@ export const BookProvider = ({children}) => {
             }));
 
             const objects = uniqueAuthorObjects.map(item => item.author);
+            setGlobalDiscount(() => {
+                const globalDiscount = discounts.filter(discount => discount?.limit === 'global');
+                const discountTotal = globalDiscount.reduce(function(accumulator, currentItem) {
+                    return accumulator + currentItem.percent;
+                }, 0);
+
+                return discountTotal;
+            });
 
             setAuthors(objects);
         }
         
         handleFetchDataFromServer();
+        
     }, []);
+
+    useEffect(() => {
+        setIntervalDiscount(() => {
+            return discounts?.filter(discount => discount?.limit !== 'global');
+        });
+    }, [discounts])
 
     useEffect(() => {
         setPageAmount(Math.ceil(booksPage?.length/8));
@@ -89,6 +109,9 @@ export const BookProvider = ({children}) => {
             paginationBooks,
             page,
             authors,
+            discounts,
+            globalDiscount,
+            intervalDiscount,
             setPage,
             setBooksPage,
             handleFilterBooks

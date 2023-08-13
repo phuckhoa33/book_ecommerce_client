@@ -5,33 +5,26 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCartContext } from '../context/cartContext';
 import { useUserContext } from '../context/userContext';
+import { Spinner } from 'react-bootstrap';
+import { updateQuantity } from '../store/store';
 
 export const Book = () => {
     const {bookId} = useParams();
     const navigate = useNavigate();
-    const {books, bookCategories, categories} = useBookContext();
+    const {books, bookCategories, categories, globalDiscount} = useBookContext();
     const {cart} = useCartContext();
     const {user} = useUserContext();
     const {addNewItemIntoCart} = useCartContext();
     const [book, setBook] = useState();
     const [relatedBooks, setRelatedBooks] = useState();
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState([]);
     const [quantity, setQuantity] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setQuantity(0);
         const findedBook = books?.find(book => book?.id==bookId);
         setBook(findedBook);
-        const currentBookCategory = bookCategories?.map(bookCategory => {
-            if(bookCategory?.bookid==book?.id){
-                return bookCategory.categoryid;
-            }
-        });
-
-        setCategory(() => {
-            return categories?.filter(cate => currentBookCategory?.includes(cate?.id));
-        })
-        console.log(category);
         
         setRelatedBooks(() => {
             return books?.slice(0,4);
@@ -40,14 +33,26 @@ export const Book = () => {
         return () => {};
     }, [bookId])
 
+    useEffect(() => {
+        const currentBookCategory =  bookCategories.map(bookCategory => {
+            if(bookCategory?.bookid==book?.id){
+                return bookCategory.categoryid;
+            }
+        });
+        setCategory(() => {
+            return categories.filter(cate => currentBookCategory.includes(cate.id));
+        })
+    }, [book])
+
 
     const handleChangeQuantity = (type) => {
         if(type==="increase"){
-            if(book?.quantity < quantity){
+            setQuantity(quantity+1);
+            if(quantity > 4 ){
                 toast.warn("This book can't meet the need");
+                setQuantity(5);
                 return;
             }
-            setQuantity(quantity+1);
         }
         else {
             setQuantity(quantity-1);
@@ -57,20 +62,26 @@ export const Book = () => {
         }
     }
     
-    const handleAddIntoCart = (e) => {
+    const handleAddIntoCart = async(e) => {
         e.preventDefault();
         if(user){
             if(quantity===0){
                 toast.warn("You must add item have quantity more 1");
                 return;
             }
-            const newItem = {...book, quantity};
+            const initialQuantity = book?.quantity;
+            const newItem = {...book, quantity, price: Math.round(book?.price - (book?.price*globalDiscount/100))};
             const duplicatedItem = cart?.find(book => book?.id==newItem?.id);
             if(duplicatedItem){
                 toast.warn("This product have been added into your cart");
                 return;
             }
-            addNewItemIntoCart(newItem);
+            setLoading(true);
+            const result = await addNewItemIntoCart(newItem, initialQuantity);
+            setLoading(false);
+            if(!result){
+                return;
+            }
             navigate("/cart");
 
         }
@@ -111,8 +122,16 @@ export const Book = () => {
                         <link itemprop="availability" href="http://schema.org/InStock"/>
                         <div className="price-shipping">
                             <div className="price" id="price-preview" quickbeam="price" quickbeam-price="800">
-                                ${book?.price}
+                            {globalDiscount>0 ? (
+                                <>
+                                    <del style={{color: "grey"}}>${book?.price} </del>
+                                    ${book?.price - (book?.price*globalDiscount/100)}
                                 
+                                </>
+                            ): (
+                                <>${book?.price}</>
+                            )}   
+                                    
                             </div>
                         </div>
                         <form id="AddToCartForm">
@@ -126,7 +145,7 @@ export const Book = () => {
                                     <ul>
                                         Category:
                                         {category?.map(cate => (
-                                            <li><a href="#" onClick={() => navigate(`/books/${cate?.name}/none/none`)}>{cate?.name}</a></li>
+                                            <li><a href="#" onClick={() => navigate(`/books/${cate?.id}/none/none`)}>{cate?.name}</a></li>
                                         ))}
                                     </ul>
                                 </li>
@@ -134,14 +153,15 @@ export const Book = () => {
                             <div className="btn-and-quantity-wrap">
                             <div className="btn-and-quantity" style={{display: 'flex'}}>
                                 <div id="AddToCart" quickbeam="add-to-cart" style={{marginRight: "1vh"}}>
-                                    <span id="AddToCartText" style={{cursor: "pointer"}} onClick={handleAddIntoCart}>Add to Cart</span>
+                                    <span id="AddToCartText" style={{cursor: "pointer"}} onClick={handleAddIntoCart}>
+                                        {loading ? <Spinner/> :"Add to Cart"}</span>
                                 </div>
                                 <div class="number-input-container">
                                     <div class="number-input-controls">
                                         <button class="number-button" onClick={() => handleChangeQuantity("increase")} type='button' id="increase">+</button>
                                         <button class="number-button" onClick={() => handleChangeQuantity("descrease")} type='button' id="decrease">-</button>
                                     </div>
-                                    <input type="text" class="number-input" id="numberInput" value={quantity} disabled/>
+                                    <input type="text" class="number-input" id="numberInput"  value={quantity} disabled/>
                                 </div>
                             </div>
                             </div>
