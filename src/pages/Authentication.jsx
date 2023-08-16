@@ -49,9 +49,9 @@ export const Authentication = () => {
         const {data} = await login(formValue);
         setLoading(false);
         const message = data.data.message;
-        if(message==="Login is successfuly" && data?.data?.user){
+        if(message==="Login is successfuly"){
             toast.success(message);
-            handleAuthentication(data.data.user);
+            handleAuthentication(data.data.token);
             navigate("/");
             return;
         }
@@ -70,16 +70,16 @@ export const Authentication = () => {
             password: passwordRegister,
             firstname: firstnameRegister,
             lastname:lastnameRegister,
-            roleid: 0
+            role: "USER"
         }
 
         setLoading(true);
         const {data} = await register(formValue);
         setLoading(false);
         const message = data.data.message;
-        if(message==="Register is successfully" && data?.data?.user){
+        if(message==="Register is successfully"){
             toast.success(message);
-            handleAuthentication(data.data.user);
+            handleAuthentication(data.data.token);
             navigate("/");
             return;
         }

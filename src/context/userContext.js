@@ -1,38 +1,67 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from 'universal-cookie';
+import { getUserById } from "../store/store";
     
 const cookies = new Cookies();
 
 const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState({
+        firstname: "",
+        lastname:"",
+        password: "",
+        address: "",
+        phone: "",
+        avatar: "",
+        id: "",
+        role: ""
+    });
+    const [username, setUsername] = useState();
 
     useEffect(() => {
-        setUser(cookies.get("user"));
+
+        handleFetchData();
+
     }, [])
+
+
+    const handleFetchData = async() => {
+        const {data} = await getUserById(null);
+        const fetchUser = data.data;
+        if(fetchUser.firstname && fetchUser.lastname){
+            setUsername(fetchUser.firstname+""+fetchUser.lastname);
+        }
+        else {
+            setUsername(fetchUser.email);
+        }
+        setUser(fetchUser);
+    }
     
 
     const handleLogout = () => {
-        cookies.remove("user");
         setUser(null);
+        localStorage.removeItem("token");
     }
 
-    const handleAuthentication = (newUser) => {
-        cookies.set("user", newUser);
-        setUser(newUser);
+    const handleAuthentication = async(token) => {
+        localStorage.setItem("token", JSON.stringify(token));
+        handleFetchData();
     }
 
     const updateUserContext = (newUser) => {
         setUser(newUser);
-        cookies.set("user", newUser);
     }
+
+    
 
 
     return (
         <UserContext.Provider
             value={{
                 user,
+                username,
+                setUser,
                 handleLogout,
                 handleAuthentication,
                 updateUserContext

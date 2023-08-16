@@ -8,7 +8,7 @@ import { Spinner } from 'react-bootstrap';
 
 export const Cart = () => {
     const navigate = useNavigate();
-    const {cart, total, totalAfterTaxAndShipping, tax, shipping, removeItemInCart, addDiscoutLabelsAndCalculateTotal, setDiscountLabel, discountLabel } = useCartContext();
+    const {cart, total, setOrderCart, totalAfterTaxAndShipping, tax, shipping, removeItemInCart, addDiscoutLabelsAndCalculateTotal, setDiscountLabel, discountLabel } = useCartContext();
     const {intervalDiscount} = useBookContext();
     const {books} = useBookContext();
     const [loading, setLoading] = useState(false);
@@ -21,6 +21,7 @@ export const Cart = () => {
             toast("You must add item into cart. Your cart is empty");
             return;
         }
+        setOrderCart(true);
         navigate("/payment/8/8");
     };
 
@@ -61,6 +62,7 @@ export const Cart = () => {
         setDiscountAddedLabels(addDiscoutLabelsAndCalculateTotal(discountLabel, intervalDiscount));
         setOpen1(true);
         setOpen(false);
+        setDiscountSearch('');
     }
 
     return (
@@ -82,7 +84,7 @@ export const Cart = () => {
                                     <p className="itemNumber">#{item?.id}</p>
                                     <h3>{item?.title}</h3>
                                     
-                                    <p> <input type="text"  className="qty" placeholder="0" value={item?.quantity}/> ${item?.price}</p>
+                                    <p> <input type="text"  className="qty" placeholder="0" value={item?.quantity}/>x ${item?.price}</p>
                                     
                                     <p className="stockStatus"> In Stock</p>
                                     </div>  
@@ -128,7 +130,7 @@ export const Cart = () => {
                             <li className="totalRow"><span className="label">Discount Labels</span><span className="value"></span>
                                     <ul>
                                         {discountAddedLabels?.map(discountAddLabel => (
-                                            <li>-{discountAddLabel}</li>
+                                            <li>- ${discountAddLabel}</li>
                                         ))}
 
                                     </ul>

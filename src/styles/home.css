@@ -131,8 +131,9 @@ body {
 /* hero section styles */
 
 #hero {
-  background-image: url(../images/hero4.png);
+  background-image: url("https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b3BlbiUyMGJvb2t8ZW58MHx8MHx8fDA%3D&w=1000&q=80");
   width: 100%;
+  background-repeat: no-repeat;
   height: 100vh;
   background-size: cover;
   background-position: top -80% right 0;
@@ -344,19 +345,19 @@ span {
   border: 1px solid #088178;
 }
 #banners .big-banners-1 {
-  background-image: url(../images/banner/b17.jpg);
+  background-image: url("https://ieltscity.vn/wp-content/uploads/2022/12/tu-vung-tieng-anh-ve-the-loai-sach.jpg");
 }
 #banners .big-banners-2 {
-  background-image: url(../images/banner/b10.jpg);
+  background-image: url("https://bookmedi.vn/image/gallery/trang%20th%C3%B4ng%20tin/bai%20blog%207%20fiction%20nonfiction/sach-fiction-va-non-fiction%20(1).jpg");
 }
 #banners .small-banners-1 {
-  background-image: url(../images/banner/b7.jpg);
+  background-image: url("https://hiu.vn/wp-content/uploads/2020/06/used-books-store-2.jpg");
 }
 #banners .small-banners-2 {
-  background-image: url(../images/banner/b4.jpg);
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmbjFNcOpUywHJurcal5YjUZYRvdCvVIlReA&usqp=CAU");
 }
 #banners .small-banners-3 {
-  background-image: url(../images/banner/b18.jpg);
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNpxZlYdJt5GtUhC7L_FzzH7lsDa1gkZvfCg&usqp=CAU");
 }
 #banners .small-banners {
   display: flex;

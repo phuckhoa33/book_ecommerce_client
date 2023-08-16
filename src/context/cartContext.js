@@ -1,14 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { updateQuantity } from "../store/store";
+import { createBill, updateQuantity } from "../store/store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CartContext = createContext();
 
 export const CartProvider = ({children}) => {
+    const navigate = useNavigate();
     const [cart, setCart] = useState([]);
     const [total, setTotal] = useState(0);
     const [totalAfterTaxAndShipping, setTotalAfterTaxAndShipping] = useState(0);
     const [discountLabel, setDiscountLabel] = useState([]);
+    const [orderCart, setOrderCart] = useState(false);
     const tax = 5;
     const shipping = 4;
 
@@ -85,7 +88,34 @@ export const CartProvider = ({children}) => {
 
         return removedValues;
     }
+    
+    const order = async(userid) => {
+        const bill = {
+            price: totalAfterTaxAndShipping,
+            payment: "None",
+            userid
+        };
 
+        const billItems = cart.map(item => {
+            return {bookid: item.id, quantity: item.quantity}
+        });
+
+        const {data} = await createBill({bill, discountList: discountLabel, billItems});
+        if("Order bill is successfully"){
+            toast.success("Order bill is successfully");
+            navigate("/");
+            setTotal(0);
+            setTotalAfterTaxAndShipping(0);
+            setDiscountLabel([]);
+            setCart([]);
+            localStorage.removeItem("cart");
+            setOrderCart(false);
+        }
+        else {
+            toast.warn("Your order is error. You can implement again");
+        }
+
+    }
 
 
     return (
@@ -97,11 +127,14 @@ export const CartProvider = ({children}) => {
                 tax,
                 shipping,
                 discountLabel,
+                orderCart,
+                setOrderCart,
                 addNewItemIntoCart,
                 removeItemInCart,
                 resetCart,
                 addDiscoutLabelsAndCalculateTotal,
-                setDiscountLabel
+                setDiscountLabel,
+                order
             }}
         >
             {children}

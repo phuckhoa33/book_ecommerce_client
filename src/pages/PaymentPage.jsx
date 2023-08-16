@@ -1,14 +1,54 @@
+import { useEffect, useState } from 'react';
 import { useCartContext } from '../context/cartContext';
 import { useUserContext } from '../context/userContext'
 import '../styles/payment.css'
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Spinner } from 'react-bootstrap';
 
 export const Payment = () => {
-	const {user} = useUserContext();
-	const {totalAfterTaxAndShipping} = useCartContext();
+	const navigate = useNavigate();
+	const {user, username} = useUserContext();
+	const {totalAfterTaxAndShipping, order, orderCart, setOrderCart} = useCartContext();
+	const {cart} = useCartContext();
+	const [date, setDate] = useState();
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+
+		if(!user.address || !user.phone){
+			navigate("/profile/none")
+			toast.warn("You must update your information about phone and address");
+		}
+		else if(totalAfterTaxAndShipping===0 || !orderCart){
+			navigate("/errorMan")
+		}
+		const currentDate = new Date();
+
+		const day = currentDate.getDate();
+		const month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0, nên cộng thêm 1
+		const year = currentDate.getFullYear();
+
+		setDate(day+"/"+month+"/"+year);
+
+		return () => {
+			setOrderCart(false)
+		}
+	}, []);
+
+	const handleSubmitOrder = async(e) => {
+		e.preventDefault();
+		setLoading(true);
+		await order(user?.id);
+		setLoading(false);
+
+	}
+
+
     return (
-        <div class="wapper">
-		<section class="sidebar-section">
-			<div class="paysam">
+        <div className="wapper">
+		<section className="sidebar-section">
+			<div className="paysam">
 				<h2>payment summary</h2>
 				<ul>
 					<li>
@@ -17,7 +57,7 @@ export const Payment = () => {
 					</li>	
 					<li>
 						<em>Date</em>
-						<span>May 23rd</span>
+						<span>{date}</span>
 					</li>
 					<li>
 						<em>Issuer</em>
@@ -30,25 +70,34 @@ export const Payment = () => {
 				</ul>
 			</div>
 		</section>
-		<section class="container-section">
-			<div class="user-info">
-				<h1>Hulu</h1>
-				<div class="address">
-					<p><span>From:</span>info@miraz.com</p>
-					<p><span>To:</span>shazada.com</p>
+		<section className="container-section">
+			<div className="user-info">
+				<h1>{username}</h1>
+				<div className="address">
+					<p><span>Your address:</span>{user.address}</p>
+					<p><span>Phone:</span>{user.phone}</p>
 				</div>	
-					<div class="msg">
-						<h2>Hi, Vin!</h2>
-						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
-						<span class="ej">Enjoy!</span>
-						<p class="sender">
-							- Your Hulu Team
+					<div className="msg">
+						<h2>Hi, {username}</h2>
+						<h3>Your order is: </h3>
+						<p>
+							<ul>
+								{cart?.map(item => (
+									<li>
+										<div>
+											<div><strong>Name:</strong> {item.title}</div>
+											<div><strong>Amount:</strong> {item.quantity}</div>
+										</div>
+									</li>
+								))}
+							</ul>
+							
 						</p>
-						<a href="#">Start Now</a>
+						<a href="#" onClick={handleSubmitOrder}>{loading?<Spinner/>:"Order"}</a>
 					</div>
-					<div class="bottom">
-						<p class="nlink">www.hulu.com/help</p>
-						<p class="brand">hulu Inc</p>
+					<div className="bottom" style={{cursor: "pointer"}}>
+						<p onClick={() => navigate("/contact")} className="nlink">Contact</p>
+						<p onClick={() => navigate("/aboutus")} className="brand">About us</p>
 					</div>
 				</div>
 		</section>

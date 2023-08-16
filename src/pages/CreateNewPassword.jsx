@@ -11,13 +11,18 @@ const cookies = new Cookies();
 function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = cookies.get('userPassword');
-    if(user===null){
+    const userPassword = cookies.get('userPassword');
+    if(userPassword===null){
       navigate("errorSoMan");
     }
+    else {
+      setUser(userPassword);
+    }
+
   }, [])
 
   const handlePasswordChange = (event) => {
@@ -35,10 +40,10 @@ function ResetPasswordForm() {
       // Gửi dữ liệu đi hoặc thực hiện hành động cần thiết
       const user = cookies.get("userPassword");
       user.password = newPassword;
-      const {data} = await updateUser(user);
+      const {data} = await updateUser(user);  
       console.log(data);
-      if(data.data==="Update is successfully"){
-        toast.success("Update is successfully");
+      if(data.data==="Update user is successfully"){
+        toast.success("Update user is successfully");   
         cookies.remove("userPassword");
         navigate("/auth");
       }

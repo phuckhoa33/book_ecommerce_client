@@ -108,7 +108,6 @@ export const Header = () => {
                                 {user ? (
                                     <>
                                         <li><a className="dropdown-item" onClick={() => navigate(`/profile/${cookies.get("user")?.email}`)} href="#">Profile</a></li>
-                                        <li><a className="dropdown-item" href="#">Setting</a></li>
                                         <li><hr className="dropdown-divider"/></li>
                                         <li><a className="dropdown-item" href="#"onClick={() => {
                                                         handleLogout();

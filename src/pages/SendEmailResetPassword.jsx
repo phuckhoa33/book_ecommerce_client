@@ -28,10 +28,11 @@ export const ResetPassword = () => {
         Promise.all([getUserByEmailProcess, sendEmailProcess]);
         setLoading(false);
         if(sendEmailProcess.data.message==="Success to call API GetAllUsers"){
-            if(getUserByEmailProcess.data.data===null){
+            if(getUserByEmailProcess.data===null){
                 toast.error("Your email is not exist with a certain account in my website");
                 return;
             }
+            toast.success()
             setValue("Oh Yeah");
         }
         cookies.set("userPassword", getUserByEmailProcess.data.data);
