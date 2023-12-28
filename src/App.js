@@ -39,7 +39,7 @@ function App() {
                     <Route path='/profile/:email' element={<Profile/>}/>
                     <Route path='/forgotPassword' element={<ResetPassword/>}/>
                     <Route path='/auth' element={<Authentication/>}/>
-                    <Route path='/createNewPassword' element={<ResetPasswordForm/>}/>
+                    <Route path='/createNewPassword/:token' element={<ResetPasswordForm/>}/>
                     <Route path='/aboutUs' element={<AboutUs/>}/>
                     <Route path='/contact' element={<Contact/>}/>
 

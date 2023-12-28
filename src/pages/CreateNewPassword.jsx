@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import '../styles/createNewPassword.css'; // Import file CSS tùy chỉnh
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'universal-cookie';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { updateUser } from '../store/store';
- 
-const cookies = new Cookies();
 
 function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [user, setUser] = useState({});
+  
+  const {token} = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userPassword = cookies.get('userPassword');
-    if(userPassword===null){
-      navigate("errorSoMan");
+    if(!token) {
+      navigate("/error")
     }
-    else {
-      setUser(userPassword);
-    }
+
+    localStorage.setItem('token', token);
 
   }, [])
 
@@ -38,18 +34,7 @@ function ResetPasswordForm() {
     // Thực hiện xử lý reset password tại đây
     if (newPassword === confirmNewPassword) {
       // Gửi dữ liệu đi hoặc thực hiện hành động cần thiết
-      const user = cookies.get("userPassword");
-      user.password = newPassword;
-      const {data} = await updateUser(user);  
-      console.log(data);
-      if(data.data==="Update user is successfully"){
-        toast.success("Update user is successfully");   
-        cookies.remove("userPassword");
-        navigate("/auth");
-      }
-      else {
-        toast.error("Sorry, my websiter have some error");
-      }
+      
       
     } else {
       toast.warn('Passwords do not match');

@@ -15,6 +15,7 @@ export const login = (formValue) => API.post("/auth/login", formValue);
 export const register = (formValue) => API.post("/auth/register", formValue);
 export const sendEmailResetPassword = (formValue) => API.post("/auth/forgotPassword", formValue);
 export const resetPassword = (formValue) => API.put("/auth", formValue);
+export const getUser = () => API.get("/user/getUser");
 
 // BIlling
 export const createBill = (formValue) => API.post("/bill", formValue);

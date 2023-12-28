@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from 'universal-cookie';
-import { getUserById } from "../store/store";
+import { getUser, getUserById } from "../store/store";
     
 const cookies = new Cookies();
 
@@ -8,8 +8,8 @@ const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
     const [user, setUser] = useState({
-        firstname: "",
-        lastname:"",
+        fullname: "",
+        username:"",
         password: "",
         address: "",
         phone: "",
@@ -27,14 +27,9 @@ export const UserProvider = ({children}) => {
 
 
     const handleFetchData = async() => {
-        const {data} = await getUserById(null);
-        const fetchUser = data.data;
-        if(fetchUser.firstname && fetchUser.lastname){
-            setUsername(fetchUser.firstname+""+fetchUser.lastname);
-        }
-        else {
-            setUsername(fetchUser.email);
-        }
+        const {data} = await getUser();
+        const fetchUser = data?.data;
+        setUsername(fetchUser.username);
         setUser(fetchUser);
     }
     
