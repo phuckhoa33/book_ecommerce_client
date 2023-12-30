@@ -37,9 +37,9 @@ function App() {
                     <Route path='/books/:category/:author/:search' element={<Books/>}/>
                     <Route path='/cart' element={<Cart/>}/>
                     <Route path='/profile/:email' element={<Profile/>}/>
-                    <Route path='/forgotPassword' element={<ResetPassword/>}/>
+                    <Route path='/forgot-password' element={<ResetPassword/>}/>
                     <Route path='/auth' element={<Authentication/>}/>
-                    <Route path='/createNewPassword/:token' element={<ResetPasswordForm/>}/>
+                    <Route path='/reset-password/:token' element={<ResetPasswordForm/>}/>
                     <Route path='/aboutUs' element={<AboutUs/>}/>
                     <Route path='/contact' element={<Contact/>}/>
 

@@ -184,7 +184,7 @@ export const Authentication = () => {
                                 <input type="password" name="password_login" value={password_login} onChange={(e) => handleChangeField(e, setFormLogin, formLogin)}/>
                                 <label>Password</label>
                             </div>
-                            <span onClick={() => navigate("/forgotPassword")} style={{color: "black", cursor: "pointer"}}>Forgot Password</span>
+                            <span onClick={() => navigate("/forgot-password")} style={{color: "black", cursor: "pointer"}}>Forgot Password</span>
                             <hr />
                             <div className="submit">
                                 <button className="dark" onClick={handleSubmitLogin}>

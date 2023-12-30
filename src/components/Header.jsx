@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logo from "../images/logo.png";
@@ -21,7 +22,7 @@ export const Header = () => {
         "Thông báo 3",
     ]);
 
-    const {user, handleLogout} = useUserContext();
+    const {checkExistUser, handleLogout, user} = useUserContext();
     const {resetCart, cart} = useCartContext();
     const [search, setSearch] = useState("");
     const {books} = useBookContext();
@@ -76,7 +77,7 @@ export const Header = () => {
                         <button className="btn btn-outline-success" type="submit" onClick={handleSearch}>Search</button>
                     </form>
                     <ul className="navbar-nav account" id="personality">
-                        {user && (
+                        {checkExistUser() && (
                             <>
                                 <li onClick={() => {
                                     navigate("/cart")
@@ -105,9 +106,9 @@ export const Header = () => {
                             <FontAwesomeIcon icon={faUser}/>
                             </button>
                             <ul className="dropdown-menu">
-                                {user ? (
+                                {checkExistUser() ? (
                                     <>
-                                        <li><a className="dropdown-item" onClick={() => navigate(`/profile/${cookies.get("user")?.email}`)} href="#">Profile</a></li>
+                                        <li><a className="dropdown-item" onClick={() => navigate(`/profile/${user?.email}`)} href="#">Profile</a></li>
                                         <li><hr className="dropdown-divider"/></li>
                                         <li><a className="dropdown-item" href="#"onClick={() => {
                                                         handleLogout();

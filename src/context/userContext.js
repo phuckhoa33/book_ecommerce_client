@@ -1,36 +1,48 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import Cookies from 'universal-cookie';
-import { getUser, getUserById } from "../store/store";
-    
-const cookies = new Cookies();
+import {useLocation} from 'react-router-dom';
+import { getUser, resetPassword, updateUser } from "../store/store";
 
 const UserContext = createContext();
 
+const initalUser = {
+    fullname: undefined,
+    username:undefined,
+    password: undefined,
+    address: undefined,
+    phone: undefined,
+    avatar: undefined,
+    id: undefined,
+    role: undefined
+}
+
 export const UserProvider = ({children}) => {
-    const [user, setUser] = useState({
-        fullname: "",
-        username:"",
-        password: "",
-        address: "",
-        phone: "",
-        avatar: "",
-        id: "",
-        role: ""
-    });
+    const [user, setUser] = useState(initalUser);
     const [username, setUsername] = useState();
+    const location = useLocation();
 
     useEffect(() => {
-
-        handleFetchData();
-
+        if(!location.pathname.includes("reset-password")){
+            handleFetchData();
+        }
+        
     }, [])
 
 
+    const checkExistUser = () => {
+        const {fullname, username, password, id, role} = user;
+        return fullname && username && password && id && role; 
+    }
+
+
     const handleFetchData = async() => {
-        const {data} = await getUser();
-        const fetchUser = data?.data;
-        setUsername(fetchUser.username);
+        const fetchUser = retrieveUserDataFromToken();
+        setUsername(fetchUser?.username);
         setUser(fetchUser);
+    }
+
+    const retrieveUserDataFromToken = async() => {
+        const {data} = await getUser();
+        return data?.data;
     }
     
 
@@ -44,8 +56,17 @@ export const UserProvider = ({children}) => {
         handleFetchData();
     }
 
-    const updateUserContext = (newUser) => {
-        setUser(newUser);
+    const updateUserFunction = async(updateType, updateUser) => {
+        let result = undefined;
+        if(updateType==="reset_password"){
+            result = await resetPassword(updateUser);
+        }
+        else {
+            // result = await updateUser(user);
+            // localStorage.setItem("token", JSON.stringify(data?.data?.token));
+        }
+
+        console.log(result);
     }
 
     
@@ -57,9 +78,12 @@ export const UserProvider = ({children}) => {
                 user,
                 username,
                 setUser,
+                retrieveUserDataFromToken,
+                checkExistUser,
+                handleFetchData,
                 handleLogout,
                 handleAuthentication,
-                updateUserContext
+                updateUserFunction
             }}
         >
             {children}

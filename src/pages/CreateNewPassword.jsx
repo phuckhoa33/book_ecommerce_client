@@ -1,23 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import '../styles/createNewPassword.css'; // Import file CSS tùy chỉnh
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { updateUser } from '../store/store';
+import { useUserContext } from '../context/userContext';
 
 function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const {updateUserFunction, retrieveUserDataFromToken} = useUserContext();
+  const [resetUser, setResetUser] = useState();
   
   const {token} = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!token) {
-      navigate("/error")
-    }
+    const fetchDataFromBegin = async() => {
+      if(!token) {
+        navigate("/error")
+      }
+      else {
+        localStorage.setItem("token", JSON.stringify(token));
+        const data = await retrieveUserDataFromToken();
+        setResetUser(data);
+      }
 
-    localStorage.setItem('token', token);
+    }
+    fetchDataFromBegin();
+
 
   }, [])
 
@@ -34,8 +45,9 @@ function ResetPasswordForm() {
     // Thực hiện xử lý reset password tại đây
     if (newPassword === confirmNewPassword) {
       // Gửi dữ liệu đi hoặc thực hiện hành động cần thiết
-      
-      
+      resetUser.password = newPassword;
+      const message = updateUserFunction("reset_password", resetUser);
+      toast(message);
     } else {
       toast.warn('Passwords do not match');
     }
